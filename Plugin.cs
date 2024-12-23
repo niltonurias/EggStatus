@@ -28,7 +28,9 @@ public class Plugin : BaseUnityPlugin
 
         int remainTime = GetRemainTimeToEggGrowUp(__instance);
 
-        return __result.Replace(")", $", - {remainTime}s)");
+        if (remainTime <= 0) return __result;
+
+        return __result.Replace(")", $", Born in {remainTime}s)");
 	}
 
     public static int GetRemainTimeToEggGrowUp(EggGrow __instance) {
@@ -37,22 +39,6 @@ public class Plugin : BaseUnityPlugin
 
         float num = zdo.GetFloat(ZDOVars.s_growStart);
 
-        if (EggCanGrow(__instance))
-        {
-            if (num == 0f)
-            {
-                num = (float)ZNet.instance.GetTimeSeconds();
-            }
-        }
-        else
-        {
-            num = 0f;
-        }
-
         return (int)(num + __instance.m_growTime) - (int) ZNet.instance.GetTimeSeconds();
-    }
-
-    public static bool EggCanGrow(EggGrow __instance) {
-        return Traverse.Create(__instance).Method("CanGrow").GetValue<bool>();
     }
 }
