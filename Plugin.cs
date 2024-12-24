@@ -31,7 +31,7 @@ public class Plugin : BaseUnityPlugin
 
         if (remainTimeInSeconds <= 0) return __result;
 
-        return __result.Replace(")", $", Born in {GetTimeFormarted(remainTimeInSeconds)})");
+        return __result.Replace(")", $", Born in {GetTimeFormated(remainTimeInSeconds)})");
     }
 
     public static int GetRemainTimeToEggGrowUp(EggGrow __instance)
@@ -44,7 +44,7 @@ public class Plugin : BaseUnityPlugin
         return (int)(num + __instance.m_growTime + __instance.m_updateInterval) - (int)ZNet.instance.GetTimeSeconds();
     }
 
-    public static string GetTimeFormarted(int seconds)
+    public static string GetTimeFormated(int seconds)
     {
         if (seconds <= 60) return $"{seconds}s";
 
