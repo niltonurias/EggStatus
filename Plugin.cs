@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
@@ -26,11 +27,11 @@ public class Plugin : BaseUnityPlugin
     {
         if (__instance == null) return __result;
 
-        int remainTime = GetRemainTimeToEggGrowUp(__instance);
+        int remainTimeInSeconds = GetRemainTimeToEggGrowUp(__instance);
 
-        if (remainTime <= 0) return __result;
+        if (remainTimeInSeconds <= 0) return __result;
 
-        return __result.Replace(")", $", Born in {remainTime}s)");
+        return __result.Replace(")", $", Born in {GetTimeFormarted(remainTimeInSeconds)})");
     }
 
     public static int GetRemainTimeToEggGrowUp(EggGrow __instance)
@@ -40,6 +41,14 @@ public class Plugin : BaseUnityPlugin
 
         float num = zdo.GetFloat(ZDOVars.s_growStart);
 
-        return (int)(num + __instance.m_growTime) - (int)ZNet.instance.GetTimeSeconds();
+        return (int)(num + __instance.m_growTime + __instance.m_updateInterval) - (int)ZNet.instance.GetTimeSeconds();
+    }
+
+    public static string GetTimeFormarted(int seconds)
+    {
+        if (seconds <= 60) return $"{seconds}s";
+
+        TimeSpan time = TimeSpan.FromSeconds(seconds);
+        return time.ToString(@"mm'm'ss's'");
     }
 }
